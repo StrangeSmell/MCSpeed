@@ -1,0 +1,15 @@
+{
+  "name": "noguifd:old_street",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element",
+        "location": "noguifd:old_street",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

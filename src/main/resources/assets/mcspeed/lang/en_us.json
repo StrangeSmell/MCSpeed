@@ -1,0 +1,15 @@
+{
+
+  "item.mcspeed.speed_boat_item": "speed boat",
+  "entity.mcspeed.speed_boat": "speed boat",
+  "MCSpeed": "MC Speed",
+  "key.mcspeed.n2o": "N2",
+  "key.mcspeed.piaoyi": "drift",
+  "key.mcspeed.xiaopen": "Small N2",
+  "key.mcspeed.right": "rihgt",
+  "key.mcspeed.left": "left",
+  "key.mcspeed.down": "down",
+  "key.mcspeed.up": "up",
+  "mcspeed.set": " sat on ",
+  "key.categories.mcspeed": "MC Speed"
+}

@@ -1,0 +1,16 @@
+{
+  "item.mcspeed.speed_boat_item": "雷诺",
+  "entity.mcspeed.speed_boat": "雷诺",
+  "MCSpeed": "MC飞车",
+
+  "key.mcspeed.n2o": "氮气",
+  "key.mcspeed.piaoyi": "漂移",
+  "key.mcspeed.xiaopen": "小喷",
+  "key.mcspeed.right": "右",
+  "key.mcspeed.left": "左",
+  "key.mcspeed.down": "后",
+  "key.mcspeed.up": "前",
+  "mcspeed.set": "坐上了",
+  "key.categories.mcspeed": "MC飞车"
+
+}
