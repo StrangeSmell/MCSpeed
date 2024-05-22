@@ -1,6 +1,5 @@
-package com.strangesmell.mcspeed.Massage;
+package com.strangesmell.mcspeed.massage;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

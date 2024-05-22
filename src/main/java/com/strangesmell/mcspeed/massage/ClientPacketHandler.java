@@ -1,8 +1,6 @@
-package com.strangesmell.mcspeed.Massage;
+package com.strangesmell.mcspeed.massage;
 
 import com.strangesmell.mcspeed.MCSpeed;
-import com.strangesmell.mcspeed.Massage.C2SMassage;
-import com.strangesmell.mcspeed.Massage.S2CClockTimeMassage;
 import com.strangesmell.mcspeed.SpeedBoat;
 import com.strangesmell.mcspeed.blocks.EndBlockEntity;
 import com.strangesmell.mcspeed.blocks.RecodeBlockEntity;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.server.permission.PermissionAPI;
 
 import java.util.function.Supplier;
 

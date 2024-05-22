@@ -1,8 +1,8 @@
 package com.strangesmell.mcspeed.blocks;
 
 import com.strangesmell.mcspeed.MCSpeed;
-import com.strangesmell.mcspeed.Massage.C2SStartMessage;
-import com.strangesmell.mcspeed.Massage.Channel;
+import com.strangesmell.mcspeed.massage.C2SStartMessage;
+import com.strangesmell.mcspeed.massage.Channel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;

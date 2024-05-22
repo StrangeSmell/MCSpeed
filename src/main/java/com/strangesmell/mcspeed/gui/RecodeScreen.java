@@ -1,18 +1,15 @@
 package com.strangesmell.mcspeed.gui;
 
-import com.strangesmell.mcspeed.Massage.C2SDeleteRecode;
-import com.strangesmell.mcspeed.Massage.Channel;
+import com.strangesmell.mcspeed.massage.C2SDeleteRecode;
+import com.strangesmell.mcspeed.massage.Channel;
 import com.strangesmell.mcspeed.blocks.RecodeBlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RecodeScreen extends Screen {
     private static final Component DELETE = Component.translatable("mcspeed.recode_delete");

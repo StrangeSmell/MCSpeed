@@ -1,12 +1,9 @@
 package com.strangesmell.mcspeed;
 
 import com.mojang.datafixers.DSL;
-import com.strangesmell.mcspeed.Massage.C2SMassage;
-import com.strangesmell.mcspeed.Massage.Channel;
+import com.strangesmell.mcspeed.massage.C2SMassage;
+import com.strangesmell.mcspeed.massage.Channel;
 import com.strangesmell.mcspeed.blocks.*;
-import com.strangesmell.mcspeed.gui.EndMenu;
-import com.strangesmell.mcspeed.gui.RecodeMenu;
-import com.strangesmell.mcspeed.gui.StartMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
@@ -19,7 +16,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -31,7 +27,6 @@ import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -40,13 +35,11 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.server.permission.PermissionAPI;
 import net.minecraftforge.server.permission.events.PermissionGatherEvent;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
 import net.minecraftforge.server.permission.nodes.PermissionTypes;
 
 import static com.strangesmell.mcspeed.KeyRegister.*;
-import static net.minecraftforge.network.NetworkEvent.RegistrationChangeType.REGISTER;
 
 @Mod(MCSpeed.MODID)
 public class MCSpeed

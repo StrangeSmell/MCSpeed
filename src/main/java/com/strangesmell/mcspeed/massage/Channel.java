@@ -1,4 +1,4 @@
-package com.strangesmell.mcspeed.Massage;
+package com.strangesmell.mcspeed.massage;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.LevelChunk;

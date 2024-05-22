@@ -1,7 +1,6 @@
-package com.strangesmell.mcspeed.Massage;
+package com.strangesmell.mcspeed.massage;
 
 import com.strangesmell.mcspeed.Util;
-import io.netty.handler.codec.DecoderException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

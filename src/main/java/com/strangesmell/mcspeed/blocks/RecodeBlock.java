@@ -1,7 +1,7 @@
 package com.strangesmell.mcspeed.blocks;
 
-import com.strangesmell.mcspeed.Massage.Channel;
-import com.strangesmell.mcspeed.Massage.RecodeMessage;
+import com.strangesmell.mcspeed.massage.Channel;
+import com.strangesmell.mcspeed.massage.RecodeMessage;
 import com.strangesmell.mcspeed.gui.RecodeScreen;
 import com.strangesmell.mcspeed.savedate.SpeedData;
 import net.minecraft.client.Minecraft;
