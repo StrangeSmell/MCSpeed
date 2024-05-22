@@ -1,4 +1,4 @@
-package com.strangesmell.mcspeed;
+package com.strangesmell.mcspeed.Massage;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -35,6 +35,26 @@ public class Channel {
                 .consumerMainThread(C2SMassage::handle)
                 .add();
 
+        net.messageBuilder(S2CClockTimeMassage.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CClockTimeMassage::new)
+                .encoder(S2CClockTimeMassage::toBytes)
+                .consumerMainThread(S2CClockTimeMassage::handle)
+                .add();
+        net.messageBuilder(C2SStartMessage.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SStartMessage::new)
+                .encoder(C2SStartMessage::toBytes)
+                .consumerMainThread(C2SStartMessage::handle)
+                .add();
+        net.messageBuilder(RecodeMessage.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(RecodeMessage::new)
+                .encoder(RecodeMessage::toBytes)
+                .consumerMainThread(RecodeMessage::handle)
+                .add();
+        net.messageBuilder(C2SDeleteRecode.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SDeleteRecode::new)
+                .encoder(C2SDeleteRecode::toBytes)
+                .consumerMainThread(C2SDeleteRecode::handle)
+                .add();
 
     }
 

@@ -1,6 +1,36 @@
 {
 
-  "item.mcspeed.speed_boat_item": "speed boat",
+  "item.mcspeed.speed_boat_item": "Speed boat",
+  "item.mcspeed.n2o_block_item": "Accelerate block",
+  "item.mcspeed.down_block_item": "Deceleration block",
+  "item.mcspeed.start_block": "Start block",
+  "item.mcspeed.end_block": "End block",
+  "item.mcspeed.recode_block": "Record blocks",
+
+
+  "block.mcspeed.n2o_block": "Accelerate block",
+  "block.mcspeed.down_block": "Deceleration block",
+  "block.mcspeed.start_block": "Start block",
+  "block.mcspeed.end_block": "End block",
+  "block.mcspeed.recode_block": "Record blocks",
+
+  "mcspeed.time": "TIME",
+  "mcspeed.best_time": "BEST",
+  "mcspeed.best_player": "BEST PLAYER:",
+  "mcspeed.best_player_is_yourself": "You are the record holder!!",
+  "mcspeed.self_time": "MY BEST",
+  "mcspeed.start_suggestion": "Enter the map name above(completed)",
+  "mcspeed.start_suggestion2": "Enter the number of turns below (incomplete)",
+  "mcspeed.recode_select": "query",
+  "mcspeed.recode_next": "-->",
+  "mcspeed.recode_previous": "<--",
+
+  "mcspeed.map": "MAP:",
+  "mcspeed.clock_done": "finish",
+
+  "mcspeed.no_permission": "No permission : ",
+  "mcspeed.recode_delete": "delete",
+
   "entity.mcspeed.speed_boat": "speed boat",
   "MCSpeed": "MC Speed",
   "key.mcspeed.n2o": "N2",

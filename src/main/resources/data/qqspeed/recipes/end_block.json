@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "boat",
+  "ingredients": [
+    {
+      "item": "mcspeed:down_block_item"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "mcspeed:end_block"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "clock",
+  "ingredients": [
+    {
+      "item": "minecraft:clock"
+    }
+  ],
+  "result": {
+    "item": "mcspeed:recode_block_item"
+  }
+}

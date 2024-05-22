@@ -1,9 +1,8 @@
 package com.strangesmell.mcspeed;
 
 import com.google.common.collect.Lists;
+import com.strangesmell.mcspeed.blocks.DownBlock;
 import net.minecraft.BlockUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -81,6 +80,13 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
     private static final EntityDataAccessor<Boolean> DATA_ID_RIGHTISDOWN = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ID_INAIR = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ID_ONLAND = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_ID_CLOCK = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_ID_ISCLOCK = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> DATA_ID_CLOCKNAME = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> DATA_ID_CLOCKINT = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<String> DATA_ID_CLOCKBESTNAME = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> DATA_ID_SELFCLOCK = SynchedEntityData.defineId(Boat.class, EntityDataSerializers.INT);
+
     public final RandomSource random = RandomSource.create();
     public AABB aabb ;
     private final float[] paddlePositions = new float[2];
@@ -106,10 +112,12 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
     private float bubbleMultiplier;
     private float bubbleAngle;
     private float bubbleAngleO;
+    public int oldClockTime;
 
     public SpeedBoat(EntityType<? extends Boat> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setMaxUpStep(0.6f);
+        this.oldClockTime=0;
     }
 
     public SpeedBoat(Level pLevel, double pX, double pY, double pZ) {
@@ -155,6 +163,12 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
         this.entityData.define(DATA_ID_RIGHTISDOWN, false);
         this.entityData.define(DATA_ID_INAIR, 0);
         this.entityData.define(DATA_ID_ONLAND, 0);
+        this.entityData.define(DATA_ID_CLOCK, 0);
+        this.entityData.define(DATA_ID_ISCLOCK, false);
+        this.entityData.define(DATA_ID_CLOCKNAME, "");
+        this.entityData.define(DATA_ID_CLOCKINT, 0);
+        this.entityData.define(DATA_ID_CLOCKBESTNAME, "");
+        this.entityData.define(DATA_ID_SELFCLOCK, 0);
     }
 
     public boolean canCollideWith(Entity pEntity) {
@@ -250,37 +264,7 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
     }
 
     public Item getDropItem() {
-        Item item;
-        switch (this.getVariant()) {
-            case SPRUCE:
-                item = Items.SPRUCE_BOAT;
-                break;
-            case BIRCH:
-                item = Items.BIRCH_BOAT;
-                break;
-            case JUNGLE:
-                item = Items.JUNGLE_BOAT;
-                break;
-            case ACACIA:
-                item = Items.ACACIA_BOAT;
-                break;
-            case CHERRY:
-                item = Items.CHERRY_BOAT;
-                break;
-            case DARK_OAK:
-                item = Items.DARK_OAK_BOAT;
-                break;
-            case MANGROVE:
-                item = Items.MANGROVE_BOAT;
-                break;
-            case BAMBOO:
-                item = Items.BAMBOO_RAFT;
-                break;
-            default:
-                item = Items.OAK_BOAT;
-        }
-
-        return item;
+        return MCSpeed.SpeedBoatItem.get();
     }
 
     public void animateHurt(float pYaw) {
@@ -346,6 +330,10 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
      * Called to update the entity's position/logic.
      */
     public void tick() {
+        //计时
+        if(getIsClock()){
+            setClock(getClock()+1);
+        }
         if(this.getFirstPassenger()!=null){
             //空喷和落地喷
             if(this.status==Status.IN_AIR) {
@@ -361,18 +349,15 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
             this.aabb = this.getBoundingBox();
             if(!this.isFree(aabb.setMaxX(aabb.maxX+0.05).setMinY(aabb.minY+0.6).setMaxZ(aabb.maxZ+0.05).setMinX(aabb.minX-0.05).setMinZ(aabb.minZ-0.05))){
                 if(getCollision()<=0){
-                    setPiaoyiTime((int) (getPiaoyiTime()*0.5));
+                    if(getPiaoyi()>0)  setPiaoyiTime((int) (getPiaoyiTime()*0.5));
                     setCollision(20);
                     level().playSound((Player) (this.getControllingPassenger()),this, MCSpeed.PENGZHUANG.get(),SoundSource.PLAYERS,1,1 );
-
                 }
-
             }else {
                 setCollision(getCollision()-1);
             }
             //漂移结束后再增加氮气
             if(getPiaoyi()>0){
-
                 setAfterPiaoyi(0);
                 if(getPiaoyiTime()<AN2OTime) setPiaoyiTime(getPiaoyiTime()+1);
             }else{
@@ -386,7 +371,7 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
                 }
             }
             //放气
-            if(getN2O()>0&& getDapenTime()<20 && getDaPenIsDown()){
+            if( getN2O()>0 && getDapenTime()<20 && getDaPenIsDown()){
 
                 setN2O(getN2O()-1);
                 this.setDapenTime(60);
@@ -482,7 +467,7 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
                 this.controlBoat();
                 this.level().sendPacketToServer(new ServerboundPaddleBoatPacket(this.getPaddleState(0), this.getPaddleState(1)));
             }
-
+            this.setOnGround(this.status == Status.ON_LAND);
             this.move(MoverType.SELF, this.getDeltaMovement());
         } else {
             this.setDeltaMovement(Vec3.ZERO);
@@ -525,6 +510,12 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
             }
         }
 
+    }
+
+    @Override
+    public void setOnGroundWithKnownMovement(boolean p_289661_, Vec3 p_289653_) {
+        this.setOnGround(this.status == Status.ON_LAND);
+        this.checkSupportingBlock(p_289661_, p_289653_);
     }
 
     private void tickBubbleColumn() {
@@ -790,7 +781,7 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
 
         }else {
             if(this.status== Status.IN_AIR){
-                this.setDeltaMovement(vec31.x, vec31.y - 0.2, vec31.z);
+                this.setDeltaMovement(vec31.x, vec31.y - 0.1, vec31.z);
             }
         }
         this.deltaRotation *= 0.85;
@@ -834,8 +825,12 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
 
                 this.setYRot(this.getYRot() + this.deltaRotation);
                 if (this.inputUp) {
+                    BlockPos blockpos = this.getOnPosLegacy();
+                    BlockState blockstate = this.level().getBlockState(blockpos);
+                    if(blockstate.getBlock() instanceof DownBlock downBlock){
+                        f += (getF()+getBaseF()- downBlock.DownBlockF)/getMass()/20 ;
+                    }else f += (getF()+getBaseF())/getMass()/20 ;
 
-                    f += (getF()+getBaseF())/getMass()/20;
                 }
 
                 if (this.inputDown) {
@@ -864,17 +859,19 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
 
                 this.setYRot(this.getYRot() + this.deltaRotation);
                 if (this.inputUp) {
+                    BlockPos blockpos = this.getOnPosLegacy();
+                    BlockState blockstate = this.level().getBlockState(blockpos);
+                    if(blockstate.getBlock() instanceof DownBlock downBlock){
+                        f += (getF()+getBaseF()- downBlock.DownBlockF)/getMass()/20 ;
+                    }else f += (getF()+getBaseF())/getMass()/20 ;
 
-                    f += (getF()+getBaseF())/getMass()/20;
+
                 }
 
                 if (this.inputDown) {
                     f -= 0.01F;
                 }
             }
-
-
-
 
             this.setDeltaMovement(this.getDeltaMovement().add((double)(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f), 0.0D, (double)(Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f)));
             this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
@@ -1007,7 +1004,7 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
         this.lastYd = this.getDeltaMovement().y;
         if (!this.isPassenger()) {
             if (pOnGround) {
-                if (this.fallDistance > 3.0F) {
+                if (this.fallDistance > 30F) {
                     if (this.status != Status.ON_LAND) {
                         this.resetFallDistance();
                         return;
@@ -1103,7 +1100,8 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
     }
 
     protected boolean canAddPassenger(Entity pPassenger) {
-        return this.getPassengers().size() < this.getMaxPassengers() && !this.canBoatInFluid(this.getEyeInFluidType());
+        if(pPassenger instanceof Player) return this.getPassengers().size() < this.getMaxPassengers() && !this.canBoatInFluid(this.getEyeInFluidType());
+        return false;
     }
 
     public void setDapenTime(int dapenTime) {
@@ -1246,6 +1244,55 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
         return this.entityData.get(DATA_ID_ONLAND);
     }
 
+    public void setClock(int time) {
+        this.entityData.set(DATA_ID_CLOCK, time);
+    }
+
+    public int getClock() {
+        return this.entityData.get(DATA_ID_CLOCK);
+    }
+
+    public void setIsClock(boolean isClock) {
+        this.entityData.set(DATA_ID_ISCLOCK, isClock);
+    }
+
+    public boolean getIsClock() {
+        return this.entityData.get(DATA_ID_ISCLOCK);
+    }
+
+    public void setClockName(String clockName) {
+        this.entityData.set(DATA_ID_CLOCKNAME, clockName);
+    }
+
+    public String getClockName() {
+        return this.entityData.get(DATA_ID_CLOCKNAME);
+    }
+
+    public void setClockInt(int clockInt) {
+        this.entityData.set(DATA_ID_CLOCKINT, clockInt);
+    }
+
+    public int getClockInt() {
+        return this.entityData.get(DATA_ID_CLOCKINT);
+    }
+
+    public void setClockBestName(String clockBestName) {
+        this.entityData.set(DATA_ID_CLOCKBESTNAME, clockBestName);
+    }
+
+    public String getClockBestName() {
+        return this.entityData.get(DATA_ID_CLOCKBESTNAME);
+    }
+
+    public void setSelfClock(int clockInt) {
+        this.entityData.set(DATA_ID_SELFCLOCK, clockInt);
+    }
+
+    public int getSelfClock() {
+        return this.entityData.get(DATA_ID_SELFCLOCK);
+    }
+
+
     protected int getMaxPassengers() {
         return 2;
     }
@@ -1295,6 +1342,7 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
     @Override
     public float getF() {
         float f =0;
+
         if(getDapenTime()>0 || getXiaopenTime()>0) return 700;
         else return 0;
     }

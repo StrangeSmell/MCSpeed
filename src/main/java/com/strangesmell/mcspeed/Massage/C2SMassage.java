@@ -1,4 +1,4 @@
-package com.strangesmell.mcspeed;
+package com.strangesmell.mcspeed.Massage;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
