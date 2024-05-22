@@ -1,5 +1,37 @@
 {
   "item.mcspeed.speed_boat_item": "雷诺",
+  "item.mcspeed.n2o_block_item": "加速方块",
+  "item.mcspeed.down_block_item": "减速方块",
+  "item.mcspeed.start_block": "起点",
+  "item.mcspeed.end_block": "终点",
+  "item.mcspeed.recode_block": "记录方块",
+
+  "block.mcspeed.n2o_block": "加速方块",
+  "block.mcspeed.down_block": "减速方块",
+  "block.mcspeed.start_block": "起点",
+  "block.mcspeed.end_block": "终点",
+  "block.mcspeed.recode_block": "记录方块",
+
+  "mcspeed.time": "时间",
+  "mcspeed.best_time": "最佳",
+  "mcspeed.best_player": "最速玩家:",
+  "mcspeed.best_player_is_yourself": "你是记录保持者!!",
+
+
+  "mcspeed.self_time": "个人记录",
+  "mcspeed.start_suggestion": "在上方写入地图名(已完成)",
+  "mcspeed.start_suggestion2": "在下方写入圈数(未完成)",
+  "mcspeed.recode_select": "查询",
+  "mcspeed.recode_next": "-->",
+  "mcspeed.recode_previous": "<--",
+
+  "mcspeed.map": "地图:",
+  "mcspeed.clock_done": "完成",
+
+  "mcspeed.no_permission": "无权限 : ",
+  "mcspeed.recode_delete": "删除",
+
+
   "entity.mcspeed.speed_boat": "雷诺",
   "MCSpeed": "MC飞车",
 

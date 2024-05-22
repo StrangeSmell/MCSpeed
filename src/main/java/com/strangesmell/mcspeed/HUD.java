@@ -1,10 +1,15 @@
 package com.strangesmell.mcspeed;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.strangesmell.mcspeed.blocks.StartBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 import static com.strangesmell.mcspeed.Util.AN2OTime;
@@ -21,7 +26,7 @@ public class HUD extends ForgeGui {
     public void render2(GuiGraphics guiGraphics, float partialTick)
     {
 
-        if (this.minecraft.player.getControlledVehicle() instanceof SpeedBoat speedBoat && minecraft.gameMode.hasExperience())
+        if (this.minecraft.player.getControlledVehicle() instanceof SpeedBoat speedBoat)
         {
             if(speedBoat.getN2O()==0){
                 renderTextureOverlay1(guiGraphics,BUCKET_LOCATION,1.0f);
@@ -40,7 +45,7 @@ public class HUD extends ForgeGui {
             }
         }
     }
-
+    //N2O
     protected void renderTextureOverlay1(GuiGraphics pGuiGraphics, ResourceLocation pShaderLocation, float pAlpha) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -50,7 +55,7 @@ public class HUD extends ForgeGui {
         RenderSystem.enableDepthTest();
         pGuiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
-
+    //N2O
     protected void renderTextureOverlay2(GuiGraphics pGuiGraphics, ResourceLocation pShaderLocation, float pAlpha) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -61,6 +66,7 @@ public class HUD extends ForgeGui {
         pGuiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
+    //小喷
     protected void renderTextureOverlay3(GuiGraphics pGuiGraphics, ResourceLocation pShaderLocation, float pAlpha) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -71,23 +77,51 @@ public class HUD extends ForgeGui {
         pGuiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void renderExperience2(GuiGraphics guiGraphics)
+    //速度,集气,计时
+    public void renderExperience2(GuiGraphics guiGraphics,SpeedBoat speedBoat)
     {
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableBlend();
-        guiGraphics.drawCenteredString(Minecraft.getInstance().font,String.format("%.2f",Minecraft.getInstance().player.getControlledVehicle().getDeltaMovement().length())+"m/s",guiGraphics.guiWidth() / 2 ,guiGraphics.guiHeight() - 60,0xFFFFFF);
-        if (minecraft.gameMode.hasExperience())
-        {
-            renderExperienceBar(guiGraphics, guiGraphics.guiWidth() / 2 - 91);
+        int color ;
+
+
+
+        //速度
+        guiGraphics.drawCenteredString(Minecraft.getInstance().font,String.format("%.2f",speedBoat.getDeltaMovement().length()*20)+"m/s",guiGraphics.guiWidth() / 2 ,guiGraphics.guiHeight() - 60,0xFFFFFF);
+        //计时
+        int clock = speedBoat.getClock();
+        guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("mcspeed.time").append(String.format("%02d",clock/1200)).append("'").append(String.format("%02d",clock/20%60)).append("'").append(String.format("%02d",clock%20*5)) ,guiGraphics.guiWidth()-30,2,0xFFFFFF);
+        //最佳记录
+        clock = speedBoat.getClockInt();
+        guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("mcspeed.best_time").append(String.format("%02d",clock/1200)).append("'").append(String.format("%02d",clock/20%60)).append("'").append(String.format("%02d",clock%20*5)) ,guiGraphics.guiWidth()-30,15,0xFFFFFF);
+
+        //个人记录
+        clock=speedBoat.getSelfClock();
+        guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("mcspeed.self_time").append(String.format("%02d",clock/1200)).append("'").append(String.format("%02d",clock/20%60)).append("'").append(String.format("%02d",clock%20*5)) ,guiGraphics.guiWidth()-38,28,0xFFFFFF);
+        //地图名、纪录保持者
+        guiGraphics.drawCenteredString(Minecraft.getInstance().font,Component.translatable("mcspeed.map").append(speedBoat.getClockName()),guiGraphics.guiWidth()/2 ,2,0xFFFFFF);
+        if(Minecraft.getInstance().player.getName().getString().equals(speedBoat.getClockBestName())&&speedBoat.getSelfClock()!=0){
+            guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("mcspeed.best_player_is_yourself"),guiGraphics.guiWidth()/2 ,15,0xFF0000);
+        }else {
+            if(speedBoat.getClockInt()==0){
+                guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("mcspeed.best_player"),guiGraphics.guiWidth()/2 ,15,0xFFFFFF);
+
+            }else{
+                guiGraphics.drawCenteredString(Minecraft.getInstance().font, Component.translatable("mcspeed.best_player").append(speedBoat.getClockBestName()) ,guiGraphics.guiWidth()/2 ,15,0xFFFFFF);
+
+            }
+
         }
+
+
+        //集气
+        renderExperienceBar(guiGraphics, guiGraphics.guiWidth() / 2 - 91);
+
         RenderSystem.enableBlend();
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
-    /**
-     * Renders the experience bar on the screen using the provided GuiGraphics object and x-coordinate.
-     * @param pGuiGraphics the GuiGraphics object used for rendering.
-     * @param pX the x-coordinate for rendering the experience bar.
-     */
+
+    //集气
     public void renderExperienceBar(GuiGraphics pGuiGraphics, int pX) {
         this.minecraft.getProfiler().push("N2OBar");
 
