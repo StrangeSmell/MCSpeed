@@ -35,6 +35,7 @@ public class EndBlockEntity extends BlockEntity {
         markUpdated();
         //level.sendBlockUpdated(this.getBlockPos(),this.getBlockState(),this.getBlockState(),2);
     }
+
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }

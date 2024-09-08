@@ -16,17 +16,22 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -38,6 +43,9 @@ import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.server.permission.events.PermissionGatherEvent;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
 import net.minecraftforge.server.permission.nodes.PermissionTypes;
+
+import java.util.Locale;
+import java.util.function.Supplier;
 
 import static com.strangesmell.mcspeed.KeyRegister.*;
 
@@ -107,7 +115,6 @@ public class MCSpeed
     public static final PermissionNode<Boolean> DELETE_RECODE = new PermissionNode<>(MODID, "deletc.recode",
             PermissionTypes.BOOLEAN, (player, uuid, contexts) -> player != null && player.hasPermissions(Commands.LEVEL_GAMEMASTERS));
 
-
     public MCSpeed()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -130,7 +137,20 @@ public class MCSpeed
 
         }
         forgeEventBus.addListener(this::registerPermissionNodes);
+        forgeEventBus.addListener(this::playerEvent);
     }
+    public void playerEvent(PlayerEvent.Clone event)
+    {
+        if(event.isWasDeath()){
+            Player oldPlayer = event.getOriginal();
+            Player newPlayer = event.getEntity();
+            if(oldPlayer.getPersistentData().get(MODID+"recode")==null) return;
+            newPlayer.getPersistentData().put(MODID+"recode",oldPlayer.getPersistentData().get(MODID+"recode"));
+        }
+
+
+    }
+
 
     public void registerPermissionNodes(PermissionGatherEvent.Nodes event)
     {
@@ -183,7 +203,7 @@ public class MCSpeed
         if (Minecraft.getInstance().player == null || !(Minecraft.getInstance().player.getControlledVehicle() instanceof SpeedBoat speedBoat)) {
             return;
         }
-        HUD hud = new HUD(Minecraft.getInstance() );
+        HUD hud = new HUD(Minecraft.getInstance());
         hud.render2(event.getGuiGraphics(),event.getPartialTick());
         hud.renderExperience2(event.getGuiGraphics(),speedBoat);
     }

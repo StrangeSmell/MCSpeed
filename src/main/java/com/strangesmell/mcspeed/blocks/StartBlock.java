@@ -6,6 +6,7 @@ import com.strangesmell.mcspeed.gui.StartScreen;
 import com.strangesmell.mcspeed.savedate.SpeedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -51,7 +52,7 @@ public class StartBlock extends SpeedEntityBlock {
                 speedBoat.setClock(0);
                 speedBoat.setClockName(clockName);
 
-                speedBoat.setSelfClock(speedBoat.getControllingPassenger().getPersistentData().getInt(MCSpeed.MODID + clockName));
+                speedBoat.setSelfClock(((CompoundTag)speedBoat.getControllingPassenger().getPersistentData().get(MCSpeed.MODID + "recode")).getInt(clockName));
 
                 ServerLevel serverLevel = (ServerLevel) level;
                 SpeedData speedData = SpeedData.get(serverLevel.getServer());

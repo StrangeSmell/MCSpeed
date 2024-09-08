@@ -1,14 +1,18 @@
 {
   "piaoyi": {
-    "sounds": [ "mcspeed:piaoyi" ]
+    "sounds": [ "mcspeed:piaoyi" ],
+    "subtitle": "subtitles.piaoyi"
   },
   "xiaopen": {
-    "sounds": [ "mcspeed:xiaopen" ]
+    "sounds": [ "mcspeed:xiaopen" ],
+    "subtitle": "subtitles.xiaopen"
   },
   "dapen": {
-  "sounds": [ "mcspeed:dapen" ]
+  "sounds": [ "mcspeed:dapen" ],
+    "subtitle": "subtitles.dapen"
   },
   "pengzhuang": {
-  "sounds": [ "mcspeed:pengzhuang" ]
+  "sounds": [ "mcspeed:pengzhuang" ],
+    "subtitle": "subtitles.pengzhuang"
 }
 }

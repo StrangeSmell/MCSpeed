@@ -8,6 +8,7 @@ import com.strangesmell.mcspeed.savedate.SpeedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -64,7 +64,14 @@ public class EndBlock extends SpeedEntityBlock {
                 }
             }
             if (speedBoat.getSelfClock() > clockTime || speedBoat.getSelfClock() == 0) {
-                speedBoat.getControllingPassenger().getPersistentData().putInt(MCSpeed.MODID + clockName, clockTime);
+
+                CompoundTag tag =( (CompoundTag)speedBoat.getControllingPassenger().getPersistentData().get(MCSpeed.MODID+"recode"));
+                if(tag==null){
+                    tag = new CompoundTag();
+                }
+                tag.putInt(clockName,clockTime);
+                speedBoat.getControllingPassenger().getPersistentData().put(MCSpeed.MODID+"recode",tag);
+
                 speedBoat.setSelfClock(clockTime);
             }
         }

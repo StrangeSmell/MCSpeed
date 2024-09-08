@@ -37,6 +37,7 @@ public class StartScreen extends Screen {
     @Override
     protected void init() {
         super.init();
+
         this.doneButton = this.addRenderableWidget(Button.builder(DONE, (p_97691_) -> {
             this.onDone();
         }).bounds(this.width / 2 - 70, this.height / 4 + 120 + 12, 150, 20).build());
@@ -55,8 +56,7 @@ public class StartScreen extends Screen {
         this.addRenderableWidget(nameEdit);
         this.addRenderableWidget(timeEdit);
 
-        this.setFocused(true);
-        this.nameEdit.setFocused(true);
+        this.setInitialFocus(this.nameEdit);
 
     }
 

@@ -9,8 +9,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class EndScreen extends Screen {
-    private static final Component NAME = Component.translatable("mcspeed.clock_name");
-    private static final Component TIME = Component.translatable("mcspeed.clock_time");
     private static final Component DONE = Component.translatable("mcspeed.clock_done");
     private static final Component SUGGESTION = Component.translatable("mcspeed.start_suggestion");
     private static final Component SUGGESTION2 = Component.translatable("mcspeed.start_suggestion2");
@@ -24,6 +22,7 @@ public class EndScreen extends Screen {
     }
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+
         // 然后是窗口小部件，如果这是Screen的直接子项
         super.render(graphics, mouseX, mouseY, partialTick);
         // 在小部件之后渲染的内容（工具提示）
@@ -55,7 +54,7 @@ public class EndScreen extends Screen {
         // 添加小部件和已预计算的值
         this.addRenderableWidget(nameEdit);
         this.addRenderableWidget(timeEdit);
-
+        this.setInitialFocus(this.nameEdit);
     }
 
     protected void onDone() {
@@ -65,6 +64,7 @@ public class EndScreen extends Screen {
         // 最后调用，以防干扰重写后的方法体
         //Channel.sendToServer(new C2SStartMessage(blockEntity.clockName,blockEntity.clockTime));
         blockEntity.needSync();
+        assert this.minecraft != null;
         this.minecraft.setScreen((Screen)null);
     }
 }

@@ -424,8 +424,10 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
                 setPiaoyi(getPiaoyi()-1);
                 if(this.level().isClientSide){
                     for(int i= 0;i<5;i++){
-                        level().addParticle(ParticleTypes.DRAGON_BREATH,this.getX()-0.3+random.nextFloat()*0.1,this.getY(),this.getZ()-0.3+random.nextFloat()*0.1,0,0,0);
-                        level().addParticle(ParticleTypes.DRAGON_BREATH,this.getX()+0.3+random.nextFloat()*0.1,this.getY(),this.getZ()+0.3+random.nextFloat()*0.1,0,0,0);
+                        System.out.println(getYRot());
+                        //level().addParticle(ParticleTypes.DRAGON_BREATH,this.getX()-0.4*Math.sin(getYRot()/180)+random.nextFloat()*0.1-Math.cos(getYRot()/180)*0.3,this.getY(),this.getZ()-0.4*Math.cos(getYRot()/180)+random.nextFloat()*0.1+Math.sin(getYRot()/180)*0.3,0,0,0);
+                        //level().addParticle(ParticleTypes.DRAGON_BREATH,this.getX()-0.4*Math.sin(getYRot()/180)+random.nextFloat()*0.1+Math.cos(getYRot()/180)*0.3,this.getY(),this.getZ()-0.4*Math.cos(getYRot()/180)+random.nextFloat()*0.1-Math.sin(getYRot()/180)*0.3,0,0,0);
+                        level().addParticle(ParticleTypes.DRAGON_BREATH,this.getX()+0.3*Math.sin(getYRot()/180),this.getY(),this.getZ()-0.3*Math.cos(getYRot()/180),0,0,0);
                     }
 
                 }
@@ -471,6 +473,13 @@ public class SpeedBoat extends Boat implements ISpeed ,CollisionGetter{
             this.move(MoverType.SELF, this.getDeltaMovement());
         } else {
             this.setDeltaMovement(Vec3.ZERO);
+            //玩家脱离后角度回正
+            if (this.level().isClientSide) {
+                if(getLeft()>=2) setLeft(getLeft() - 2);
+                else if(getLeft()==1) setLeft(0);
+                if(getRight()>=2) setRight(getRight() - 2);
+                else if(getRight()==1) setRight(0);
+            }
         }
 
         this.tickBubbleColumn();
